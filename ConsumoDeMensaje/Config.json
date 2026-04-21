@@ -1,0 +1,16 @@
+{
+    "CopyPage":{
+        "envio_de_rutas": true,
+        "rutas": [
+            "C:\\Users\\JHONATAN\\Desktop\\archivos\\Panasantia\\integracion de datos\\script Python\\automation-scripts\\Mensajes\\ListaArchivoErrores.txt"
+        ],
+        "envio_Whatsapp": ["prueba"],
+        "envio_Resumen": true,
+        "resumen_ruta": "C:\\Users\\JHONATAN\\Desktop\\archivos\\Panasantia\\integracion de datos\\script Python\\automation-scripts\\Mensajes\\Resumen-copypage.txt"
+    },
+    "deleteLog":{
+        "envio_Whatsapp": ["prueba"],
+        "envio_Resumen": true,
+        "resumen_rutas": "C:\\Users\\JHONATAN\\Desktop\\archivos\\Panasantia\\integracion de datos\\script Python\\automation-scripts\\Mensajes\\Resumen-Limpieza.txt"
+    }
+}

@@ -1,6 +1,15 @@
-config/
-*.log
-Storage/*
 venv/
+.env
+
+# Ignorar contenido de Logs pero mantener la carpeta
+Logs/*
+!Logs/.gitkeep
+
+# Ignorar contenido de Storage pero mantener la carpeta
+Storage/*
+!Storage/.gitkeep
+
+# Ignorar contenido de Mensajes pero mantener archivos base vacíos
 Mensajes/*
-ConsumoDeMensaje/
+!Mensajes/.gitkeep
+!Mensajes/ListaArchivoErrores.txt
