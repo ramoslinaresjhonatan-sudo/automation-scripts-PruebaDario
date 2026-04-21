@@ -1,0 +1,26 @@
+{
+  "_comentario": "Configuración para la limpieza automática de archivos antiguos (logs, txt, etc.)",
+  "chats": [
+    "Nombre_Del_Grupo_O_Contacto"
+  ],
+  "datos": [
+    {
+      "nombre": "Nombre1",
+      "limite": 7,
+      "tipo_limite": "dias",
+      "rutas_logs": [
+        "C:\\RUTA\\A\\TU\\CARPETA\\DE\\LOGS"
+      ],
+      "extensiones": [".log", ".txt"]
+    },
+    {
+      "nombre": "Nombre2",
+      "limite": 3,
+      "tipo_limite": "meses",
+      "rutas_logs": [
+        "C:\\OTRA\\RUTA\\DE\\LOGS"
+      ],
+      "extensiones": [".log", ".txt", ".bak"]
+    }
+  ]
+}

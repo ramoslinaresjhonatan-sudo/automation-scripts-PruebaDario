@@ -1,0 +1,8 @@
+{
+    "_comentario": "Configuración del servidor de correo SMTP para alertas",
+    "server": "smtp.tuservidor.com",
+    "port": 25,
+    "email_address": "tu_correo@dominio.com",
+    "display_name": "Nombre Destinatario Correo",
+    "error_recipients": "admin1@dominio.com; admin2@dominio.com"
+}

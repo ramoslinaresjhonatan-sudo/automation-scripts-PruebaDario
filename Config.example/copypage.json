@@ -1,0 +1,42 @@
+{
+    "_comentario": "Configuración de tareas de copiado de archivos (CopyPage)",
+    "datos": [
+        {
+            "nombre": "Nombre1",
+            "carpeta_origen": "C:\\RUTA\\ORIGEN\\PROD",
+            "carpeta_destino": "C:\\RUTA\\DESTINO\\DESA",
+            "dias_para_considerar": 30,
+            "solo_QVD": false
+        },{
+            "nombre": "Nombre2",
+            "carpeta_origen": "C:\\RUTA\\ORIGEN\\PROD",
+            "carpeta_destino": "C:\\RUTA\\DESTINO\\DESA",
+            "dias_para_considerar": 30,
+            "solo_QVD": false
+        },{
+            "nombre": "Nombre3",
+            "carpeta_origen": "C:\\RUTA\\ORIGEN\\PROD",
+            "carpeta_destino": "C:\\RUTA\\DESTINO\\DESA",
+            "dias_para_considerar": 30,
+            "solo_QVD": false
+        }
+    ],
+    "logsTareas": [
+        "usuario1@ejemplo.com",
+        "usuario2@ejemplo.com"
+    ],
+    "whatsapp": {
+        "_comentario": "Configuración para notificaciones de WhatsApp (CopyPage)",
+        "Activo": true,
+        "numero": ["Nombre_Grupo_O_Contacto"],
+        "texto": true,
+        "image": false
+    },
+    "asuntoCorreo": "Resultado del proceso de copia - Automatización",
+    "deleteLog": {
+        "_comentario": "Configuración para el reporte de eliminación de logs (ConsumoDeMensaje)",
+        "envio_Whatsapp": ["Prueba"],
+        "envio_Resumen": true,
+        "resumen_rutas": "C:\\RUTA\\A\\TU\\Resumen-Limpieza.txt"
+    }
+}
