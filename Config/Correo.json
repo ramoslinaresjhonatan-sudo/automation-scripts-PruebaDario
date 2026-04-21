@@ -1,7 +1,0 @@
-{
-    "server": "avicolamail.avicolasofia.com",
-    "port": 25,
-    "email_address": "bianalitica@mamayatech.com",
-    "display_name": "BI & Analitica de Datos",
-    "error_recipients": "drueda.ext@mamayatech.com; sebastian.toledo@mamayatech.com"
-}
