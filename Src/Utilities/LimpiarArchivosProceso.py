@@ -54,8 +54,11 @@ class LimpiadorLogs:
                 self._eliminar(archivo, logger)
 
     def _debe_eliminar(self, archivo, fecha_limite):
-        fecha = datetime.fromtimestamp(os.path.getmtime(archivo))
-        return fecha < fecha_limite
+        try:
+            fecha = datetime.fromtimestamp(os.path.getmtime(archivo))
+            return fecha < fecha_limite
+        except:
+            return False
 
     def _eliminar(self, archivo, logger):
         try:

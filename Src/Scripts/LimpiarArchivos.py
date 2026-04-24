@@ -48,7 +48,6 @@ async def main():
         whatsapp = WhatsAppSender()
         if not await whatsapp.conectar():
             print("[ERROR] No se pudo conectar a WhatsApp.")
-            # No retornamos aquí para permitir que la limpieza ocurra aunque falle WhatsApp
         
         ahora = datetime.now()
         reporte_txt = f"fecha: {ahora.strftime('%d-%m-%Y')}\n"
@@ -58,7 +57,7 @@ async def main():
         for conf in config["datos"]:
             escenario = conf['nombre'].replace(" ", "_")
             logger = crear_logger(escenario)
-            logger(f"[INFO] Iniciando: {conf['nombre']}")
+            logger(f"[INFO] Iniciando limpieza de escenario: {conf['nombre']}")
 
             limpiador = LimpiadorLogs()
             total, espacio, eliminados = limpiador.limpiar(conf, logger)
@@ -85,7 +84,7 @@ async def main():
         with open(ruta_mensaje, "w", encoding="utf-8") as f:
             f.write(reporte_txt)
         
-        print(f"[INFO] Mensaje guardado en: {ruta_mensaje}")
+        print(f"[INFO] Mensaje de resumen guardado en: {ruta_mensaje}")
         
         await whatsapp.cerrar()
         print("[INFO] Proceso de limpieza completado de forma exitosa.")

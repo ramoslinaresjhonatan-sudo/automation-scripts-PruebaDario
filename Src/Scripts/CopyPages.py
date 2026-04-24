@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import asyncio
 
 root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if root_dir not in sys.path:
@@ -25,13 +26,11 @@ correo_service = Correo(
     port=correo_cfg.get("port"),
     email_address=correo_cfg.get("email_address"),
     display_name=correo_cfg.get("display_name"),
-    error_recipients=";".join(config.get("logsTareas", [])) # Destinatarios
+    error_recipients=";".join(config.get("logsTareas", []))
 )
 
 whatsapp_cfg = config.get("whatsapp", {})
 asunto_correo = config.get("asuntoCorreo", "Resultado del proceso de copia")
-
-import asyncio
 
 async def main():
     tareas_exitosas = []
@@ -53,14 +52,17 @@ async def main():
         )
 
         if error_log_path:
-            print(f"\n[INFO] Enviando reporte de errores para tarea '{nombre}'...")
-            CopyPageProceso.enviar_correo_error(error_log_path, correo_service, asunto_correo)
+            if tiene_errores:
+                 print(f"\n[INFO] Enviando reporte de errores para tarea '{nombre}'...")
+                 CopyPageProceso.enviar_correo_error(error_log_path, correo_service, asunto_correo)
+            
             tarea_info = {
                 "nombre": nombre,
                 "bytes_copiados": bytes_copiados,
                 "destino": destino,
                 "log_path": error_log_path if tiene_errores else None
             }
+            
             if tiene_errores:
                  tareas_con_errores.append(tarea_info)
             else:

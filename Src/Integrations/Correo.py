@@ -22,7 +22,6 @@ class Correo:
         return to
 
     def send_mail(self, to, subject, message, attachments=None, is_html=False):
-
         try:
             recipients = self._prepare_recipients(to)
             msg = MIMEMultipart('alternative')
@@ -30,12 +29,10 @@ class Correo:
             msg['To'] = ", ".join(recipients)
             msg['Subject'] = subject
 
-            # Tratamiento automático de HTML
             force_html = is_html or message.strip().lower().startswith("<html")
             content_type = 'html' if force_html else 'plain'
             msg.attach(MIMEText(message, content_type))
 
-            # Manejo unificado de adjuntos
             if attachments:
                 attachment_list = [attachments] if isinstance(attachments, str) else attachments
                 for path in attachment_list:
@@ -59,15 +56,14 @@ class Correo:
             return False
 
     def send_styled_report(self, to, subject, content):
-
         cuerpo_html = content.replace("\n", "<br>")
-        color_header = "#667eea" # Azul corporativo por defecto
+        color_header = "#667eea"
         
         titulo_lower = subject.lower()
         if "error" in titulo_lower or "fallo" in titulo_lower:
-            color_header = "#d63031" # Rojo para errores
+            color_header = "#d63031"
         elif "recarga" in titulo_lower or "éxito" in titulo_lower or "exito" in titulo_lower:
-            color_header = "#28a745" # Verde para éxitos
+            color_header = "#28a745"
 
         html = f"""
         <html>
@@ -130,5 +126,3 @@ class Correo:
         """
         subject = f"Error Crítico: Proceso de Extracción - {process_name}"
         return self.send_mail(to, subject, table_html, is_html=True)
-
-    

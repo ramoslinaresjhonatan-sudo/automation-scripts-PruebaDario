@@ -29,7 +29,7 @@ def enviar_correo_error(archivo_error, smtp_service, asunto):
     try:
         mensaje = (
             "Estimados,\n\n"
-            "Se adjunta el resultado del proceso de copia.\n\n"
+            "Se adjunta el resultado del proceso de copia con los errores encontrados.\n\n"
             "Saludos."
         )
 
@@ -71,10 +71,6 @@ def construir_mensaje_resumen(tareas_ok, tareas_error):
     for i, t in enumerate(all_tareas, 1):
         bytes_val = t.get("bytes_copiados", 0)
         gb_val = bytes_val / (1024**3)
-        # Formato con comas para miles y 3 decimales si es necesario, o según el ejemplo del usuario: 15,325
-        # El ejemplo del usuario 15,325 parece usar coma como separador de miles o como decimal? 
-        # En muchos países hispanos la coma es decimal. Pero "15,325 (Gbytes)" sugiere GigaBytes.
-        # Usaremos formato con comas para miles y 3 decimales.
         mensaje += f"{i}. incremento: {gb_val:,.3f} (Gbytes)\n"
         
     mensaje += "--------------------------------------\n"
@@ -89,7 +85,6 @@ def construir_mensaje_resumen(tareas_ok, tareas_error):
             
         drive_letter = os.path.splitdrive(destino)[0]
         if not drive_letter and destino.startswith("\\\\"):
-            # Caso de ruta UNC: Tomar la primera parte como el "disco"
             parts = destino.split('\\')
             if len(parts) > 3:
                 drive_letter = f"\\\\{parts[2]}\\{parts[3]}"
@@ -100,7 +95,6 @@ def construir_mensaje_resumen(tareas_ok, tareas_error):
             try:
                 usage = shutil.disk_usage(destino)
                 free_gb = usage.free / (1024**3)
-                # Extraer solo la letra si es un disco local (ej: D: -> D)
                 display_drive = drive_letter.replace(":", "") if ":" in drive_letter else drive_letter
                 mensaje += f"{drive_idx}. [{display_drive}]: {free_gb:,.2f} (Gbytes)\n"
                 drives_processed.add(drive_letter)
@@ -119,12 +113,9 @@ async def enviar_whatsapp_resumen_tareas(tareas_exitosas, tareas_con_errores, wa
         if not chats:
             return
 
-        enviar_con_imagen = wa_config.get("image", True)
         enviar_con_texto = wa_config.get("texto", True)
-
         archivos_envio = []
 
-        # Si hay errores y queremos adjuntar el archivo de log
         for t_err in tareas_con_errores:
             if t_err.get('log_path') and os.path.exists(t_err['log_path']):
                 archivos_envio.append(t_err['log_path'])
@@ -225,7 +216,6 @@ def copiar_archivos_modificados(nombre, origen, destino, dias_para_considerar=No
         def proceso_archivo(archivo):
             nonlocal libre, copiados, omitidos, total_bytes_copiados
             try:
-                # Validar si el archivo es el propio destino para evitar recursión infinita
                 try:
                     if destino_path in archivo.resolve().parents or archivo.resolve() == destino_path:
                         return None
@@ -247,7 +237,6 @@ def copiar_archivos_modificados(nombre, origen, destino, dias_para_considerar=No
                 rel_path = os.path.relpath(archivo, origen)
                 destino_ruta = os.path.join(destino, rel_path)
                 
-                # Optimizar creación de directorios
                 parent_dir = os.path.dirname(destino_ruta)
                 if parent_dir not in dir_cache:
                     with lock:
@@ -291,8 +280,6 @@ def copiar_archivos_modificados(nombre, origen, destino, dias_para_considerar=No
         with open(log_path, "w", encoding="utf-8") as log:
             registrar(log, f"Iniciando escaneo de {len(archivos_a_procesar)} elementos")
             
-            # Usar ThreadPoolExecutor para paralelizar la copia
-            # El número de hilos se puede ajustar, 8-16 suele ser bueno para I/O
             with ThreadPoolExecutor(max_workers=10) as executor:
                 resultados = list(executor.map(proceso_archivo, archivos_a_procesar))
                 
