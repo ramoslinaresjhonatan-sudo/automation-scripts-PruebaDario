@@ -26,17 +26,7 @@
         "usuario2@ejemplo.com"
     ],
     "whatsapp": {
-        "_comentario": "Configuración para notificaciones de WhatsApp (CopyPage)",
         "Activo": true,
-        "numero": ["Nombre_Grupo_O_Contacto"],
-        "texto": true,
-        "image": false
-    },
-    "asuntoCorreo": "Resultado del proceso de copia - Automatización",
-    "deleteLog": {
-        "_comentario": "Configuración para el reporte de eliminación de logs (ConsumoDeMensaje)",
-        "envio_Whatsapp": ["Prueba"],
-        "envio_Resumen": true,
-        "resumen_rutas": "C:\\RUTA\\A\\TU\\Resumen-Limpieza.txt"
+        "numero":["Nombre_Grupo_O_Contacto"]
     }
 }

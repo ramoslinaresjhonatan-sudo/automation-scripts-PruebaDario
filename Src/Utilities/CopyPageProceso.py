@@ -7,8 +7,6 @@ import threading
 from pathlib import Path
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
-from Src.Integrations.Picture import picture
-from Src.Integrations.Storage import Storage
 from Src.Integrations.WhatsApp import WhatsApp
 
 def resource_path(filename):

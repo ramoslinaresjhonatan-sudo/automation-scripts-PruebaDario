@@ -1,5 +1,4 @@
 import os
-import sys
 import smtplib
 import logging
 from datetime import datetime
@@ -132,89 +131,4 @@ class Correo:
         subject = f"Error Crítico: Proceso de Extracción - {process_name}"
         return self.send_mail(to, subject, table_html, is_html=True)
 
-    def send_tasks_summary(self, subject, tasks, state_description, to=None):
-        if to is None:
-            try:
-                actual_dir = os.path.dirname(os.path.abspath(__file__))
-                root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(actual_dir))))
-                if root_dir not in sys.path:
-                    sys.path.insert(0, root_dir)
-                from Config.QlikMonitor.constants import RECIPIES_EMAIL
-                to = RECIPIES_EMAIL
-            except ImportError:
-                to = ["smatny.ext@mamayatech.com", "esdrey.vaca@mamayatech.com"]
-
-        if not tasks:
-            logging.info(f"No hay tareas con estado '{state_description}'. No se emite correo.")
-            return False
-
-        html_content = f"""
-        <html>
-        <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #2c3e50; padding: 20px; background-color: #f7f9fc;">
-            <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 900px; margin: auto;">
-                <h2 style="color:#2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; margin-top: 0;">
-                    Monitor Qlik Sense: <span style="color: #666; font-weight: normal;">{state_description}</span>
-                </h2>
-                <p style="font-size: 16px; margin-bottom: 25px;">Se encontraron <strong style="font-size: 18px; color: #e74c3c;">{len(tasks)}</strong> tarea(s) registradas con este estado.</p>
-                
-                <table cellpadding="12" cellspacing="0" style="border-collapse: collapse; width:100%; font-size: 14px; border: 1px solid #ecf0f1;">
-                    <thead style="background-color:#f8f9fa; text-align: left; border-bottom: 2px solid #dde1e5;">
-                        <tr style="color: #7f8c8d;">
-                            <th>Nombre de la Tarea</th>
-                            <th>App Relacionada</th>
-                            <th style="text-align: center;">Estado</th>
-                            <th>Inicio y Fin</th>
-                            <th>Duración</th>
-                            <th>Mensaje Reportado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-        """
-
-        for task in tasks:
-            op = task.get('operational', {})
-            last_result = op.get('lastExecutionResult', {})
-            details = last_result.get('details', [])
-            last_message = details[-1]['message'] if details else "Sin detalle disponible"
-            
-            status = last_result.get('status', 'N/A')
-            status_style = "background: #f1f2f6; color: #57606f;"
-            if status == "FinishedSuccess": 
-                status_style = "background: #e5f9e7; color: #2ecc71;"
-            elif status in ["FinishedFail", "Failed"]: 
-                status_style = "background: #fdeceb; color: #e74c3c;"
-            
-            start_time = last_result.get('startTime', 'N/A').split('T')[0] if 'T' in str(last_result.get('startTime', '')) else last_result.get('startTime', 'N/A')
-            stop_time = last_result.get('stopTime', 'N/A').split('T')[0] if 'T' in str(last_result.get('stopTime', '')) else last_result.get('stopTime', 'N/A')
-
-            html_content += f"""
-                        <tr style="border-bottom: 1px solid #ecf0f1; transition: background-color 0.3s;">
-                            <td style="font-weight: 600; color: #34495e;">{task.get('name', 'N/A')}</td>
-                            <td style="color: #7f8c8d;">{task.get('app', {}).get('name', 'General/N/A')}</td>
-                            <td style="text-align:center;">
-                                <span style="{status_style} padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block;">
-                                    {status}
-                                </span>
-                            </td>
-                            <td style="font-size: 13px; color: #95a5a6;">
-                                {start_time}<br>
-                                <span style="font-size: 11px;">{stop_time}</span>
-                            </td>
-                            <td style="font-weight: 500; text-align: right;">{last_result.get('duration', 0)} ms</td>
-                            <td style="color: #7f8c8d; font-size: 13px; max-width: 250px; overflow: hidden; text-overflow: ellipsis;">
-                                {last_message}
-                            </td>
-                        </tr>
-            """
-
-        html_content += """
-                    </tbody>
-                </table>
-                <div style="margin-top: 30px; font-size: 12px; color:#bdc3c7; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">
-                    Notificación Automática | Mamayatech Business Intelligence
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-        return self.send_mail(to, subject, html_content, is_html=True)
+    
